@@ -9,8 +9,27 @@
 
 This unsigned varint (VARiable INTeger) format is for the use in all the multiformats.
 
-- We have not yet decided on a format yet. When we do, this readme will be updated.
-- We have time. All multiformats are far from requiring this varint.
+There is time to discuss the details of this. All  multiformats are far from requiring this varint.
+
+## Format
+
+Our unsigned varint is an MSB based unsigned varint.
+
+The MSB-based unsigned varint is based on the [varint of the Go standard library](https://golang.org/src/encoding/binary/varint.go), with some modifications:
+- There is no max. The Go implementation has a "64-bit integer" max (using 10 bytes for representation). Thankfully, the Go implementation leaves the door open to grow the integer if need be. Here, we explicitly state there is no maxmimum. _There is always a continuation bit._
+- Implementations of each multiformat will give recommended maxes to avoid memory attacks, and varint implementations SHOULD either:
+  - specify a soft max (a max in the implementation though not in the spec)
+  - or require clients (like a `mulithash` implementation) to specify the max.
+
+This format is simpler, and our varints are not expected to ever get beyond 32bits, as opposed to what you might find with group varints.
+
+### Spec
+
+The encoding is:
+- unsigned integers are serialized 7 bits at a time, starting with the
+  least significant bits
+- the most significant bit (msb) in each output byte indicates if there
+  is a continuation byte (msb = 1)
 
 ## Maintainers
 
