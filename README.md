@@ -22,6 +22,44 @@ The encoding is:
 - the most significant bit (msb) in each output byte indicates if there is a continuation byte (msb = 1)
 - there are no signed integers
 
+Examples: 
+
+```
+1     => 00000001
+127   => 01111111
+128   => 10000000 00000001
+255   => 11111111 00000001
+300   => 10101100 00000010
+16384 => 10000000 10000000 00000001
+```
+
+Code that generates this.
+```
+package main
+
+// test program. we can use the go one.
+import (
+  "encoding/binary" // varint is here
+  "fmt"
+)
+
+func main() {
+  ints := []uint64{1, 127, 128, 255, 300, 16384}
+  for _, i := range ints {
+    buf := make([]byte, 10)
+    n := binary.PutUvarint(buf, uint64(i))
+
+    fmt.Print(i, "\t=> ")
+    for c := 0; c < n; c++ {
+      fmt.Printf("%08b ", int(buf[c]))
+    }
+    fmt.Println()
+  }
+}
+```
+
+
+
 ### Practical maximum of 10 bytes (for security)
 
 For security, to avoid memory attacks, we use a "practical max" of 10 bytes. Though there is no theoretical limit, and future specs can grow this number if it is truly necessary to have code or length values larger than `2^31`. 
