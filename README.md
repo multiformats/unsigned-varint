@@ -15,8 +15,8 @@ There is time to discuss the details of this. All  multiformats are far from req
 
 Our unsigned varint is an MSB based unsigned varint.
 
-The MSB-based unsigned varint is based on the [varint of the Go standard library](https://golang.org/src/encoding/binary/varint.go), with some modifications:
-- There is no max. The Go implementation has a "64-bit integer" max (using 10 bytes for representation). Thankfully, the Go implementation leaves the door open to grow the integer if need be. Here, we explicitly state there is no maxmimum. _There is always a continuation bit._
+The MSB-based unsigned varint is based on the [varint of the Go standard library](https://golang.org/src/encoding/binary/varint.go) and [protocol buffers](), with some modifications:
+- There is no max. The Go implementation has a "64-bit integer" max (using 10 bytes for representation). Thankfully, the Go implementation leaves the door open to grow the integer if need be. Here, we explicitly state there is no maxmimum. _There may always be a continuation bit._
 - Implementations of each multiformat will give recommended maxes to avoid memory attacks, and varint implementations SHOULD either:
   - specify a soft max (a max in the implementation though not in the spec)
   - or require clients (like a `mulithash` implementation) to specify the max.
