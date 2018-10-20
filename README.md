@@ -69,7 +69,7 @@ func main() {
 
 ### Practical maximum of 9 bytes (for security)
 
-For security, to avoid memory attacks, we use a "practical max" of 9 bytes. Though there is no theoretical limit, and future specs can grow this number if it is truly necessary to have code or length values larger than `2^31`. 
+For security, to avoid memory attacks, we use a "practical max" of 9 bytes. Though there is no theoretical limit, and future specs can grow this number if it is truly necessary to have code or length values larger than `2^63 - 1`. 
 
 For the forseeable future:
 
