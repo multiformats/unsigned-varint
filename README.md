@@ -100,6 +100,11 @@ Instead, in the multiformats unsigned-varint, we explicitly declare that our uns
 
 This format is simpler, and our varints are not expected to ever get beyond 63bits, as opposed to what you might find with group varints.
 
+## Implementations
+
+* [Rust](https://github.com/paritytech/unsigned-varint)
+* [JS](https://github.com/chrisdickinson/varint)
+
 ## Maintainers
 
 Captain: [@jbenet](https://github.com/jbenet).
