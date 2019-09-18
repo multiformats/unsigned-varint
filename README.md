@@ -1,6 +1,6 @@
 # unsigned-varint
 
-[![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io)
+[![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](https://protocol.ai)
 [![](https://img.shields.io/badge/project-multiformats-blue.svg?style=flat-square)](https://github.com/multiformats/multiformats)
 [![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](https://webchat.freenode.net/?channels=%23ipfs)
 [![](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
@@ -21,6 +21,7 @@ The encoding is:
 - unsigned integers are serialized 7 bits at a time, starting with the least significant bits
 - the most significant bit (msb) in each output byte indicates if there is a continuation byte (msb = 1)
 - there are no signed integers
+- integers are minimally encoded
 
 Examples: 
 
@@ -77,13 +78,14 @@ For the forseeable future:
 - A multiformat spec MAY explicitly declare a smaller maximum when using varints.
 - A multiformat spec MAY NOT explicitly declare a larger maximum when using varints without first changing this spec.
 
-### Max differences from Go Varint
+### Main differences from Go Varint
 
-This MSB-based unsigned varint is based on the [varint of the Go standard library](https://golang.org/src/encoding/binary/varint.go), which itself was based on the protocol buffers one, and that one in turn was based on ...
+This MSB-based unsigned varint is based on the [varint of the Go standard library](https://golang.org/src/encoding/binary/varint.go), which itself was based on the protocol buffers one.
 
-However, we have two modifications:
+However, we have three modifications:
 
-- Multiformats varint only supports unsigned integers, the Go varint supports signed (using zig-zag encoding)
+- Multiformats varint only supports unsigned integers, the Go varint supports signed (using zig-zag encoding).
+- Multiformats varints must be minimally encoded. That is, numbers must be encoded in the least number of bytes possible.
 - Multiformats varint does not use the 9th byte's msb as part of the number. It never interprets 64-bit numbers from 9 bytes. The Go varint does do that.
 
 > What is this about 9th byte msb in Go varint ...
@@ -99,6 +101,12 @@ Instead, in the multiformats unsigned-varint, we explicitly declare that our uns
   - This gives us a large window of numbers (2^63 is a huge number), plenty big for these use cases.
 
 This format is simpler, and our varints are not expected to ever get beyond 63bits, as opposed to what you might find with group varints.
+
+> What do we mean by minimally encoded?
+
+Multiformat varints must be encoded in as few bytes as possible. To illustrate
+the issue, take `{0x81 0x00}`. This is a valid golang varint encoding of 0x1.
+However, the _minimal_ encoding of 0x1 is `{0x1}`.
 
 ## Maintainers
 
