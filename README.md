@@ -82,25 +82,10 @@ For the forseeable future:
 
 This MSB-based unsigned varint is based on the [varint of the Go standard library](https://golang.org/src/encoding/binary/varint.go), which itself was based on the protocol buffers one.
 
-However, we have three modifications:
+However, we have two modifications:
 
 - Multiformats varint only supports unsigned integers, the Go varint supports signed (using zig-zag encoding).
 - Multiformats varints must be minimally encoded. That is, numbers must be encoded in the least number of bytes possible.
-- Multiformats varint does not use the 9th byte's msb as part of the number. It never interprets 64-bit numbers from 9 bytes. The Go varint does do that.
-
-> What is this about 9th byte msb in Go varint ...
-
-In the Go implementation, the target is a "64-bit integer". Since the 64th bit bumps to 10 varint bytes, the authors chose to restrict the maximum size to 9-bytes and made the last byte's msb be part of the number. This means the Go implementation is incompatible with 128bit varints (protobuf), see the design note in [varint.go](https://golang.org/src/encoding/binary/varint.go). This also means growing the varint may be difficult or break things as numbers might then mean two different things.
-
-Instead, in the multiformats unsigned-varint, we explicitly declare that our unsigned varints are _theoretically_ infinite, but _in practice_ limited to 9 bytes for security. This means:
-
-- There may always be a continuation bit. 
-- A continuation bit in the 9th byte MUST be ignored, and an error returned.
-- Our unsigned ints are compatible with much larger integers (like 128-bit unsigned protobuf varints)
-- Leaves door open for growing in the future if it is absolutely needed.
-  - This gives us a large window of numbers (2^63 is a huge number), plenty big for these use cases.
-
-This format is simpler, and our varints are not expected to ever get beyond 63bits, as opposed to what you might find with group varints.
 
 > What do we mean by minimally encoded?
 
