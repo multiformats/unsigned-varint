@@ -33,7 +33,7 @@ Examples:
 300   => 10101100 00000010
 16384 => 10000000 10000000 00000001
 ```
-
+A step-by-step explanation of the encoding algorithm can be found [in the protocol buffers documentation.](https://developers.google.com/protocol-buffers/docs/encoding#varints) 
 ```
 byte   # |              0 |            1   |          2     |
 bit    # |c 6 5 4 3 2 1 0 |c 5 4 3 2 1 0 7 |c 4 3 2 1 0 7 6 |
