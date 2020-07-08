@@ -9,8 +9,6 @@
 
 This unsigned varint (VARiable INTeger) format is for the use in all the multiformats.
 
-There is time to discuss the details of this. All  multiformats are far from requiring this varint.
-
 ## Format
 
 Our unsigned varint is an MSB based unsigned varint.
