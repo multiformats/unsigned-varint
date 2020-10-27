@@ -91,6 +91,11 @@ Multiformat varints must be encoded in as few bytes as possible. To illustrate
 the issue, take `{0x81 0x00}`. This is a valid golang varint encoding of 0x1.
 However, the _minimal_ encoding of 0x1 is `{0x1}`.
 
+## Implementations
+
+* [Rust](https://github.com/paritytech/unsigned-varint)
+* [JS](https://github.com/chrisdickinson/varint)
+
 ## Maintainers
 
 Captain: [@jbenet](https://github.com/jbenet).
