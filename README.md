@@ -11,7 +11,12 @@ This unsigned varint (VARiable INTeger) format is for the use in all the multifo
 
 ## Format
 
-Our unsigned varint is an MSB based unsigned varint.
+Our unsigned varint is a variant of unsigned [LEB128](https://en.wikipedia.org/wiki/LEB128) with some additional restrictions.
+
+Specifically, unlike LEB128:
+
+- Signed numbers are not supported.
+- Leading zeros must be trimmed when encoding and must be rejected when decoding. The only number that can end in `0x0` is `0x0`.
 
 ### Spec
 
@@ -76,7 +81,7 @@ For the forseeable future:
 - A multiformat spec MAY explicitly declare a smaller maximum when using varints.
 - A multiformat spec MAY NOT explicitly declare a larger maximum when using varints without first changing this spec.
 
-### Main differences from Go Varint
+### Incompatibilities with Go varints
 
 This MSB-based unsigned varint is based on the [varint of the Go standard library](https://golang.org/src/encoding/binary/varint.go), which itself was based on the protocol buffers one.
 
@@ -95,10 +100,7 @@ However, the _minimal_ encoding of 0x1 is `{0x1}`.
 
 * [Rust](https://github.com/paritytech/unsigned-varint)
 * [JS](https://github.com/chrisdickinson/varint)
-
-## Maintainers
-
-Captain: [@jbenet](https://github.com/jbenet).
+* [Go](https://github.com/multiformats/go-varint)
 
 ## Contribute
 
