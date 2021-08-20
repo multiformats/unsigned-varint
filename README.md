@@ -95,6 +95,7 @@ However, the _minimal_ encoding of 0x1 is `{0x1}`.
 
 * [Rust](https://github.com/paritytech/unsigned-varint)
 * [JS](https://github.com/chrisdickinson/varint)
+* [C](https://github.com/Jorropo/c-ipfs#unsigned-varuint)
 
 ## Maintainers
 
