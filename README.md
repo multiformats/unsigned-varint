@@ -24,12 +24,12 @@ The encoding is:
 Examples: 
 
 ```
-1     => 00000001
-127   => 01111111
-128   => 10000000 00000001
-255   => 11111111 00000001
-300   => 10101100 00000010
-16384 => 10000000 10000000 00000001
+1 (0x01)        => 00000001 (0x01)
+127 (0x7f)      => 01111111 (0x7f)
+128 (0x80)      => 10000000 00000001 (0x8001)
+255 (0xff)      => 11111111 00000001 (0xff01)
+300 (0x012c)    => 10101100 00000010 (0xac02)
+16384 (0x4000)  => 10000000 10000000 00000001 (0x808001)
 ```
 
 ```
@@ -45,22 +45,26 @@ package main
 
 // test program. we can use the go one.
 import (
-  "encoding/binary" // varint is here
-  "fmt"
+	"encoding/binary" // varint is here
+	"fmt"
 )
 
 func main() {
-  ints := []uint64{1, 127, 128, 255, 300, 16384}
-  for _, i := range ints {
-    buf := make([]byte, 10)
-    n := binary.PutUvarint(buf, uint64(i))
+	ints := []uint64{1, 127, 128, 255, 300, 16384}
+	for _, i := range ints {
+		buf := make([]byte, 10)
+		n := binary.PutUvarint(buf, uint64(i))
 
-    fmt.Print(i, "\t=> ")
-    for c := 0; c < n; c++ {
-      fmt.Printf("%08b ", int(buf[c]))
-    }
-    fmt.Println()
-  }
+		hexStr := fmt.Sprintf("%x", i)
+		if len(hexStr)%2 == 1 {
+			hexStr = "0" + hexStr
+		}
+		fmt.Print(i, " (0x"+hexStr+")\t=> ")
+		for c := 0; c < n; c++ {
+			fmt.Printf("%08b ", int(buf[c]))
+		}
+		fmt.Printf("(0x%x)\n", buf[:n])
+	}
 }
 ```
 
